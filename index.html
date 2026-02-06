@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mano</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body {
+            /* Đường dẫn ảnh đã sửa theo tên folder mới */
+            background-image: url('bg/Background_Main.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        /* Menu ba gạch */
+        .menu-btn {
+            position: absolute;
+            top: 20px; right: 20px;
+            font-size: 35px; color: white; cursor: pointer; z-index: 100;
+            background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 5px;
+        }
+        .sidebar {
+            position: fixed; top: 0; right: -100%; /* Sửa lỗi hiển thị trên mobile */
+            width: 250px; height: 100%;
+            background: rgba(20, 0, 40, 0.98);
+            transition: 0.4s; padding-top: 80px; z-index: 99;
+            border-left: 2px solid #9b59b6;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar a {
+            display: flex; align-items: center;
+            padding: 15px 20px; text-decoration: none;
+            color: #d8b4fe; font-size: 18px; transition: 0.3s;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar img { width: 30px; height: 30px; margin-right: 15px; border-radius: 5px; }
+
+        /* Vùng trung tâm */
+        .main-content { 
+            text-align: center; 
+            width: 100%;
+            padding: 0 20px;
+        }
+        .avatar-circle {
+            width: 120px; height: 120px;
+            background-image: url('icons/Github.png'); /* Folder mới: icons */
+            background-size: cover;
+            border-radius: 50%;
+            border: 3px solid #9b59b6;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 20px #9b59b6;
+        }
+        .title-name {
+            color: white; font-size: 32px; font-weight: bold; margin-bottom: 30px;
+            text-shadow: 0 0 10px #9b59b6;
+        }
+
+        /* Nút bấm */
+        .btn-container { 
+            display: flex; 
+            gap: 20px; 
+            justify-content: center;
+            /* Mặc định là ngang trên PC */
+            flex-direction: row; 
+        }
+        .btn {
+            position: relative;
+            padding: 15px 0; /* Padding trên dưới */
+            width: 180px; /* Chiều rộng cố định */
+            font-size: 18px; font-weight: bold;
+            color: #e0ccff; background: #4a0072;
+            border: 2px solid #9b59b6; border-radius: 50px;
+            cursor: pointer; text-decoration: none;
+            overflow: hidden; text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 25px #d8b4fe; }
+
+        /* --- TỐI ƯU CHO ĐIỆN THOẠI (Dưới 768px) --- */
+        @media (max-width: 768px) {
+            .btn-container {
+                flex-direction: column; /* Xếp dọc */
+                align-items: center; /* Căn giữa */
+            }
+            .btn {
+                width: 100%; /* Nút dài hết màn hình */
+                max-width: 280px; /* Nhưng không quá to */
+            }
+            .title-name { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div class="sidebar" id="sidebar">
+        <a href="https://youtube.com/@justtmanoo" target="_blank"><img src="icons/YouTube.png"> YouTube</a>
+        <a href="https://zalo.me/g/vzbrod229" target="_blank"><img src="icons/Zalo.png"> Zalo</a>
+        <a href="https://github.com/justtmanoo" target="_blank"><img src="icons/Github.png"> Github</a>
+    </div>
+
+    <div class="main-content">
+        <div class="avatar-circle"></div>
+        <div class="title-name">Mano</div>
+        <div class="btn-container">
+            <a href="files/tool/FileTool.py" download class="btn">Tải Tool</a>
+            <a href="obfuscator.html" class="btn">Obfuscator</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
