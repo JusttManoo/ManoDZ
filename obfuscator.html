@@ -2,29 +2,35 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mano Obfuscator</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         
+        /* --- PHẦN QUAN TRỌNG ĐỂ KHÓA MÀN HÌNH --- */
+        html, body {
+            width: 100%;
+            height: 100%; /* Bắt buộc chiều cao đúng bằng màn hình */
+            overflow: hidden; /* Cấm tuyệt đối việc cuộn */
+            overscroll-behavior: none; /* Cấm hiệu ứng nảy (rubber-band) trên iOS/Android */
+            position: fixed; /* Cố định khung hình */
+        }
+
         body {
             background-color: #1a0b2e;
-            /* LƯU Ý QUAN TRỌNG: 
-               File ảnh 'Main_Background.gif' phải nằm CÙNG THƯ MỤC.
-            */
             background-image: url('./Main_Background.gif'); 
             background-size: cover; 
             background-position: center; 
-            background-attachment: fixed;
-            min-height: 100vh;
+            /* Xóa background-attachment: fixed vì body đã fixed rồi */
+            
             display: flex; align-items: center; justify-content: center;
             padding: 20px;
-            overflow-x: hidden;
+            
             -webkit-tap-highlight-color: transparent; 
         }
 
         #bg-overlay {
-            position: fixed;
+            position: absolute; /* Đổi fixed thành absolute vì body đã fixed */
             top: 0; left: 0;
             width: 100%; height: 100%;
             background-size: cover; 
@@ -38,22 +44,20 @@
         .container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            /* Giảm khoảng cách giữa các nút */
             gap: 20px; 
             width: 100%;
-            /* Giảm độ rộng tối đa để các nút trông gọn hơn */
             max-width: 600px; 
             z-index: 1;
+            /* Đảm bảo container không bị tràn nếu màn hình quá bé */
+            max-height: 100%;
         }
 
         .obs-btn {
             width: 100%;
-            /* Giảm chiều cao nút xuống 70px (cũ là 100px) */
             height: 70px; 
-            border-radius: 15px; /* Bo góc nhỏ lại xíu cho hợp với kích thước mới */
+            border-radius: 15px;
             border: 2px solid rgba(255,255,255,0.3);
             display: flex; align-items: center; justify-content: center;
-            /* Giảm cỡ chữ xuống 18px */
             font-size: 18px; 
             font-weight: 900;
             text-decoration: none;
@@ -74,36 +78,26 @@
 
         .obs-btn:hover { transform: scale(1.05); z-index: 10; border-color: white; }
 
-        /* --- STYLE MỚI CHO NÚT BACK --- */
         .back-home {
-            position: fixed;
+            position: fixed; /* Giữ nguyên fixed để luôn nổi trên cùng */
             top: 20px; left: 20px;
             color: white; 
             text-decoration: none; 
             font-weight: bold;
-            
-            /* Màu nền trắng trong suốt (Glass effect) */
             background: rgba(255, 255, 255, 0.15);
-            
-            /* Viền đen */
             border: 2px solid #000; 
-            
             padding: 10px 20px; 
             border-radius: 30px;
             z-index: 100;
-            
-            /* Làm mờ hậu cảnh */
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* Cho Safari */
-            
+            -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: transform 0.2s ease, background-color 0.2s;
         }
 
-        /* Hiệu ứng khi di chuột hoặc bấm vào nút Back */
         .back-home:hover, .back-home:active {
-            transform: scale(1.1); /* Phóng to lên */
-            background: rgba(255, 255, 255, 0.25); /* Sáng hơn chút */
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.25);
             border-color: #333;
         }
 
@@ -111,11 +105,10 @@
             .container { 
                 grid-template-columns: 1fr; 
                 gap: 15px; 
-                max-width: 350px; /* Trên điện thoại giới hạn chiều ngang lại cho đẹp */
+                max-width: 350px;
             }
-            /* Trên mobile giảm chiều cao xuống 80px (cũ là 120px) */
             .obs-btn { height: 80px; font-size: 20px; }
-            body { padding-top: 80px; }
+            /* Xóa padding-top body để căn giữa chuẩn hơn khi đã khóa scroll */
         }
     </style>
 </head>
@@ -143,6 +136,11 @@
         const overlay = document.getElementById('bg-overlay');
         const buttons = document.querySelectorAll('.obs-btn');
 
+        // Ngăn chặn sự kiện kéo (touchmove) trên body để chắc chắn không cuộn được
+        document.body.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
         function changeBackground(imageUrl) {
             if (!imageUrl) return;
             overlay.style.backgroundImage = `url('${imageUrl}')`;
@@ -155,6 +153,7 @@
 
         buttons.forEach(btn => {
             const bgImage = btn.getAttribute('data-bg');
+            // Preload ảnh để tránh giật lag
             if(bgImage) {
                 const img = new Image();
                 img.src = bgImage;
