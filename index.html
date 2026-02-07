@@ -35,32 +35,26 @@
             pointer-events: none; 
         }
         
-        /* --- NÚT MENU MỚI (ANIMATION XOAY) --- */
+        /* --- NÚT MENU --- */
         .menu-btn {
             position: absolute; top: 25px; right: 25px;
             width: 50px; height: 50px;
             z-index: 100; cursor: pointer;
-            
-            /* Tạo hình dáng nút bấm (Background mờ) */
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 15px; /* Bo góc nút to */
-            
-            /* Căn giữa 3 gạch */
+            border-radius: 15px;
             display: flex; flex-direction: column; 
             justify-content: center; align-items: center;
-            gap: 6px; /* Khoảng cách giữa các gạch */
-            
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), background 0.3s; /* Hiệu ứng xoay nảy */
+            gap: 6px;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), background 0.3s;
         }
 
-        /* Vẽ 3 dấu gạch ngang */
         .menu-btn span {
             display: block;
             width: 26px; height: 3px;
             background-color: white;
-            border-radius: 4px; /* Bo cong đầu gạch */
+            border-radius: 4px;
             transition: 0.4s;
         }
 
@@ -69,30 +63,19 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
-        /* --- TRẠNG THÁI KHI MỞ MENU (ACTIVE) --- */
-        /* 1. Xoay cả nút */
         .menu-btn.active {
-            transform: rotate(90deg); /* Xoay 90 độ lên trên */
-            border-color: #9b59b6; /* Đổi màu viền sang tím */
+            transform: rotate(90deg);
+            border-color: #9b59b6;
         }
-
-        /* 2. Biến 3 gạch thành dấu X */
-        .menu-btn.active span:nth-child(1) {
-            transform: translateY(9px) rotate(45deg); /* Gạch 1 xoay chéo xuống */
-        }
-        .menu-btn.active span:nth-child(2) {
-            opacity: 0; /* Gạch giữa biến mất */
-            transform: translateX(-10px);
-        }
-        .menu-btn.active span:nth-child(3) {
-            transform: translateY(-9px) rotate(-45deg); /* Gạch 3 xoay chéo lên */
-        }
+        .menu-btn.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .menu-btn.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .menu-btn.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
         /* --- SIDEBAR --- */
         .sidebar {
             position: fixed; top: 0; right: -350px;
             width: 280px; height: 100%;
-            background: rgba(15, 5, 30, 0.85); /* Nền tối hơn chút */
+            background: rgba(15, 5, 30, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -103,6 +86,7 @@
         }
         .sidebar.active { right: 0; }
 
+        /* --- CẬP NHẬT: HIỆU ỨNG SHINE CHO NÚT SIDEBAR --- */
         .sidebar a {
             display: flex; align-items: center;
             padding: 15px 20px; text-decoration: none;
@@ -112,12 +96,31 @@
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.05);
             transition: 0.3s;
+            /* Thêm 2 dòng này để chứa ánh sáng */
+            position: relative;
+            overflow: hidden;
         }
+        
+        /* Tạo luồng sáng cho Sidebar */
+        .sidebar a::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+            transform: skewX(-25deg); transition: none;
+            pointer-events: none; /* Để không chắn click chuột */
+        }
+
         .sidebar a:hover {
             background: rgba(155, 89, 182, 0.5);
-            padding-left: 25px; /* Hiệu ứng trượt chữ */
+            padding-left: 25px;
             box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
         }
+        
+        /* Kích hoạt luồng sáng khi hover Sidebar */
+        .sidebar a:hover::after {
+            left: 150%; transition: left 0.6s;
+        }
+
         .sidebar img { width: 25px; height: 25px; margin-right: 15px; border-radius: 5px; }
 
         /* --- AVATAR & CONTENT --- */
@@ -129,6 +132,8 @@
             position: relative;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        
+        /* --- CẬP NHẬT: HIỆU ỨNG SHINE CHO AVATAR --- */
         .avatar-circle {
             width: 120px; height: 120px;
             background-image: url('icons/GithubAVT.png');
@@ -136,10 +141,28 @@
             border: 3px solid #9b59b6;
             box-shadow: 0 0 20px #9b59b6;
             transition: box-shadow 0.3s, border-color 0.3s;
+            /* Thêm 2 dòng này để chứa ánh sáng trong hình tròn */
+            position: relative;
+            overflow: hidden; 
         }
+
+        /* Tạo luồng sáng cho Avatar */
+        .avatar-circle::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+            transform: skewX(-25deg); transition: none;
+            pointer-events: none;
+        }
+
         .avatar-wrapper:hover { transform: scale(1.1); }
         .avatar-wrapper:hover .avatar-circle {
             box-shadow: 0 0 50px #d2b4de; border-color: #fff;
+        }
+        
+        /* Kích hoạt luồng sáng khi hover vào wrapper */
+        .avatar-wrapper:hover .avatar-circle::after {
+            left: 150%; transition: left 0.6s;
         }
 
         .title-name {
@@ -218,7 +241,7 @@
             const menuBtn = document.querySelector('.menu-btn');
             
             sidebar.classList.toggle('active');
-            menuBtn.classList.toggle('active'); // Thêm class active để kích hoạt xoay nút
+            menuBtn.classList.toggle('active');
             
             if (sidebar.classList.contains('active')) {
                 mainContent.classList.add('blur-active');
@@ -235,10 +258,9 @@
             const mainContent = document.getElementById('mainContent');
             const bgLayer = document.getElementById('bg-layer');
 
-            // Sửa logic click outside để bao gồm cả việc reset nút menu
             if (!sidebar.contains(event.target) && !menuBtn.contains(event.target) && sidebar.classList.contains('active')) {
                 sidebar.classList.remove('active');
-                menuBtn.classList.remove('active'); // Reset nút xoay về cũ
+                menuBtn.classList.remove('active');
                 mainContent.classList.remove('blur-active');
                 bgLayer.classList.remove('blur-active');
             }
